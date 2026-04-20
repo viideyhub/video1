@@ -1,288 +1,129 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Video Viral</title>
-
-<!-- POPUNDER -->
-<script>
-(function(s){
-    s.dataset.zone='10879872',
-    s.src='https://al5sm.com/tag.min.js'
-})
-([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))
-</script>
-
-<style>
-body { margin:0; background:#000; font-family:Arial; color:#fff; }
-
-/* HEADER */
-.header { position:absolute; top:15px; left:15px; display:flex; align-items:center; }
-.avatar { width:45px; height:45px; border-radius:50%; background:url('https://i.pravatar.cc/100') center/cover; margin-right:10px; }
-.follow { background:#ff2e63; padding:5px 10px; border-radius:20px; margin-left:10px; font-size:12px; }
-
-/* VIEWER */
-.viewer {
-    position:absolute; top:70px; left:15px;
-    background:rgba(0,0,0,0.6);
-    padding:5px 10px; border-radius:15px;
-    font-size:13px;
-}
-
-/* VIDEO */
-.video-container { height:70vh; position:relative; }
-video { width:100%; height:100%; object-fit:cover; }
-
-/* PLAY */
-.play-btn {
-    position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    width:80px; height:80px;
-    background:rgba(255,255,255,0.85);
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-}
-.play-btn::after { content:"▶"; font-size:30px; color:#000; }
-
-/* RIGHT STACK (LIKE + TELEGRAM) */
-.right-stack {
-    position: fixed;
-    right: 15px;
-    bottom: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-/* LIKE */
-.like-box {
-    font-size: 16px;
-    animation: pulseLike 2s infinite;
-}
-@keyframes pulseLike {
-    0% {transform:scale(1);}
-    50% {transform:scale(1.1);}
-    100% {transform:scale(1);}
-}
-
-/* TELEGRAM */
-.telegram-box {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    cursor:pointer;
-}
-
-.telegram-icon {
-    width:60px;
-    height:60px;
-    background:#0088cc;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    box-shadow:0 0 20px rgba(0,136,204,0.8);
-    animation:pulse 1.8s infinite;
-}
-
-.telegram-icon img {
-    width:30px;
-    filter:brightness(0) invert(1);
-}
-
-.telegram-text {
-    font-size:13px;
-    margin-top:5px;
-}
-
-@keyframes pulse {
-    0%{transform:scale(1);}
-    50%{transform:scale(1.08);}
-    100%{transform:scale(1);}
-}
-
-/* LIVE COMMENTS */
-.live-comments {
-    position:fixed;
-    bottom:120px;
-    left:10px;
-    width:70%;
-}
-
-.live-item {
-    display:flex;
-    margin-bottom:8px;
-    animation:fadeUp 4s forwards;
-}
-
-.live-circle {
-    width:28px;
-    height:28px;
-    border-radius:50%;
-    margin-right:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.live-text {
-    background:rgba(0,0,0,0.6);
-    padding:6px 10px;
-    border-radius:15px;
-}
-
-@keyframes fadeUp {
-    0%{opacity:0; transform:translateY(20px);}
-    20%{opacity:1;}
-    100%{opacity:0; transform:translateY(-10px);}
-}
-
-/* COMMENT INPUT */
-.comment-box {
-    position:fixed;
-    bottom:15px;
-    left:10px;
-    right:10px;
-    background:#111;
-    border-radius:25px;
-    padding:10px;
-    color:#888;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videy Clone - Buat Video Menakjubkan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // Konfigurasi warna Tailwind agar mirip dengan Videy
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1',
+                        secondary: '#EC4899',
+                        dark: '#0F172A',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .bg-blur {
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-dark text-white font-sans antialiased">
 
-<div class="header">
-    <div class="avatar"></div>
-    <div>
-        <div><b>Dinda Utami</b></div>
-        <div style="font-size:12px;">155K Pengikut</div>
-    </div>
-    <div class="follow">Ikuti</div>
-</div>
-
-<div class="viewer">🔥 <span id="viewerCount">12.3K</span> watching</div>
-
-<div class="video-container" onclick="triggerAds()">
-    <video id="vid">
-        <source src="https://cdn.videy.co/nLwWp4f51.mp4">
-    </video>
-    <div class="play-btn" onclick="playVideo(event)"></div>
-</div>
-
-<!-- RIGHT SIDE -->
-<div class="right-stack">
-    <div class="like-box">❤️ <span id="likeCount">316</span></div>
-
-    <div class="telegram-box" onclick="goTelegram()">
-        <div class="telegram-icon">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+    <!-- Navbar -->
+    <nav class="fixed w-full top-0 left-0 z-50 bg-dark/80 bg-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary text-gradient">Videy</a>
+                </div>
+                
+                <!-- Menu Desktop -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#" class="text-gray-300 hover:text-white transition px-3 py-2 rounded-md text-sm font-medium">Fitur</a>
+                        <a href="#" class="text-gray-300 hover:text-white transition px-3 py-2 rounded-md text-sm font-medium">Harga</a>
+                        <a href="#" class="text-gray-300 hover:text-white transition px-3 py-2 rounded-md text-sm font-medium">Dokumentasi</a>
+                        <a href="https://contoh-link-iklan.com" target="_blank" class="bg-white text-dark hover:bg-gray-200 transition px-5 py-2 rounded-full text-sm font-bold">Mulai Gratis</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="telegram-text">Telegram</div>
-    </div>
-</div>
+    </nav>
 
-<div class="live-comments" id="liveComments"></div>
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+                Buat Video <br class="md:hidden">
+                <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Menakjubkan</span>
+                <br>dalam Hitungan Detik
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+                Platform termudah untuk membuat, mengedit, dan membagikan video profesional tanpa perlu pengalaman desain.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                <a href="https://contoh-link-iklan.com" target="_blank" class="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition duration-300 px-8 py-4 rounded-full text-lg font-bold shadow-lg shadow-primary/30">
+                    <i class="fa fa-rocket mr-2"></i> Coba Sekarang Gratis
+                </a>
+                <a href="#video-demo" class="bg-white/10 hover:bg-white/20 transition duration-300 border border-white/20 px-8 py-4 rounded-full text-lg font-bold">
+                    <i class="fa fa-play-circle mr-2"></i> Lihat Demo
+                </a>
+            </div>
 
-<div class="comment-box">Write a comment...</div>
+            <!-- Preview Video MP4 -->
+            <div id="video-demo" class="relative mx-auto border border-white/10 rounded-xl p-2 bg-white/5 shadow-2xl max-w-4xl">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-xl blur-lg opacity-30 animate-pulse"></div>
+                <video 
+                    class="relative rounded-lg w-full h-auto aspect-video" 
+                    controls
+                    poster="https://picsum.photos/1200/600">
+                    <source src="https://contoh-link-video.mp4" type="video/mp4">
+                    Browser kamu tidak mendukung pemutaran video.
+                </video>
+            </div>
+        </div>
+    </section>
 
-<script>
-let vid=document.getElementById("vid");
-let click=0,lastClick=0;
+    <!-- Features Section -->
+    <section class="py-16 px-4 bg-black/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition">
+                    <i class="fa fa-bolt text-4xl text-yellow-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Sangat Cepat</h3>
+                    <p class="text-gray-400">Proses rendering hanya dalam beberapa menit, siap download.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition">
+                    <i class="fa fa-magic text-4xl text-pink-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Template Keren</h3>
+                    <p class="text-gray-400">Ratusan template profesional yang bisa diedit dengan mudah.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition">
+                    <i class="fa fa-cloud text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Berbasis Cloud</h3>
+                    <p class="text-gray-400">Bisa diakses dari mana saja, tidak perlu install aplikasi berat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-function playVideo(e){
-    e.stopPropagation();
-    vid.play();
-    document.querySelector('.play-btn').style.display='none';
-    triggerAds();
-}
-
-function triggerAds(){
-    let now=Date.now();
-    if(now-lastClick<800)return;
-    lastClick=now;
-    click++;
-
-    if(click===2){
-        setTimeout(()=>{window.open("https://omg10.com/4/10888070","_blank");},1500);
-    }
-    if(click===3){
-        setTimeout(()=>{window.open("https://omg10.com/4/10888070","_blank");},1200);
-    }
-}
-
-function goTelegram(){
-    triggerAds();
-    setTimeout(()=>{window.open("https://t.me/viralterkini","_blank");},1000);
-}
-
-/* VIEWER */
-let viewer=12300;
-setInterval(()=>{
-    viewer+=Math.floor(Math.random()*20)-10;
-    document.getElementById("viewerCount").innerText=(viewer/1000).toFixed(1)+"K";
-},2000);
-
-/* LIKE */
-let like=316;
-setInterval(()=>{
-    like+=Math.floor(Math.random()*5)+1;
-    document.getElementById("likeCount").innerText=like;
-},1500);
-
-/* KOMENTAR REALISTIS */
-const chatFlow=[
-"ini live ya?",
-"serius rame banget 😳",
-"aku baru masuk",
-"katanya di telegram full 😳",
-"aku udah join di t.me/viralterkini",
-"rame banget sumpah",
-"gas join sekarang 🔥",
-"link nya t.me/viralterkini",
-"buset beneran ada 😳"
-];
-
-const names=["Budi","Andi","Rina","Dewi","Fajar","Sari"];
-let index=0;
-
-function randomColor(){
-    const c=["#ff5c5c","#ffc107","#00c9a7","#4dabf7"];
-    return c[Math.floor(Math.random()*c.length)];
-}
-
-function addLive(){
-    let item=document.createElement("div");
-    item.className="live-item";
-
-    let circle=document.createElement("div");
-    circle.className="live-circle";
-    circle.style.background=randomColor();
-    let name=names[Math.floor(Math.random()*names.length)];
-    circle.innerText=name[0];
-
-    let text=document.createElement("div");
-    text.className="live-text";
-    text.innerText=name+": "+chatFlow[index];
-
-    index++;
-    if(index>=chatFlow.length) index=0;
-
-    item.appendChild(circle);
-    item.appendChild(text);
-    document.getElementById("liveComments").appendChild(item);
-
-    setTimeout(()=>item.remove(),4000);
-}
-
-setInterval(addLive,1400+Math.random()*1200);
-</script>
+    <!-- Footer -->
+    <footer class="py-10 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 Videy Clone. Dibuat dengan ❤️ menggunakan kode sederhana.</p>
+    </footer>
 
 </body>
-    </html>
+                    </html>
+        
